@@ -3,9 +3,7 @@ import Repos from './Github/Repos';
 import UserProfile from './Github/UserProfile';
 import Notes from './Notes/Notes';
 import helpers from '../utils/helpers';
-//import Rebase from 're-base';
 
-//var base = Rebase.createClass('https://github-note-taker.firebaseio.com/');
 
 class Profile extends React.Component{
   constructor(props){
@@ -17,19 +15,17 @@ class Profile extends React.Component{
     };
   }
   init(){
-    //this.ref = base.bindToState(this.router.getCurrentParams().username, {
-      //context: this,
-      //asArray: true,
-      //state: 'notes'
-    //});
+    let {username} = this.router.getCurrentParams();
+    helpers.getNotesForUser(username, dataObj => {
+      this.setState({notes: dataObj.val() || []});
+    });
 
-    helpers.getGithubInfo(this.router.getCurrentParams().username)
-      .then((dataObj) => {
-        this.setState({
-          bio: dataObj.bio,
-          repos: dataObj.repos
-        });
+    helpers.getGithubInfo(username).then((dataObj) => {
+      this.setState({
+        bio: dataObj.bio,
+        repos: dataObj.repos
       });
+    });
   }
   componentWillMount(){
     this.router = this.context.router;
@@ -38,17 +34,16 @@ class Profile extends React.Component{
     this.init();
   }
   componentWillUnmount(){
-    //base.removeBinding(this.ref);
   }
   componentWillReceiveProps(){
-    //base.removeBinding(this.ref);
     this.init();
   }
   handleAddNote(newNote){
-    console.log('need to add new note', newNote);
-    //base.post(this.router.getCurrentParams().username, {
-      //data: this.state.notes.concat([newNote])
-    //});
+    // TODO - Let's move this to an action
+    let {username} = this.router.getCurrentParams();
+    let notes = this.state.notes.concat([newNote]);
+    helpers.setNotesForUser(username, notes);
+    this.setState({notes});
   }
   render(){
     var username = this.router.getCurrentParams().username;
