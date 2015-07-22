@@ -2,11 +2,7 @@ import React from 'react';
 import Repos from './Github/Repos';
 import UserProfile from './Github/UserProfile';
 import Notes from './Notes/Notes';
-//import helpers from '../utils/helpers';
-
-import Flux from '../dispatcher/dispatcher';
-import NoteStore from '../stores/NoteStore';
-import NoteActions from '../actions/NoteActions';
+import helpers from '../utils/helpers';
 
 class Profile extends React.Component{
   constructor(props){
@@ -25,15 +21,15 @@ class Profile extends React.Component{
     if (this.state.username !== username) {
       this.setState({username});
 
-      NoteActions.fetchNotes(username);
+      //NoteActions.fetchNotes(username);
 
       // TODO - turn to store/actions
-      //helpers.getGithubInfo(username).then((dataObj) => {
-        //this.setState({
-          //bio: dataObj.bio,
-          //repos: dataObj.repos
-        //});
-      //});
+      helpers.getGithubInfo(username).then((dataObj) => {
+        this.setState({
+          bio: dataObj.bio,
+          repos: dataObj.repos
+        });
+      });
 
     }
   }
@@ -84,9 +80,9 @@ Profile.contextTypes = {
 };
 
 // Connect to flux
-let stores = [NoteStore];
-Profile = Flux.connect(Profile, stores, () => ({
-  notes: NoteStore.getNotes()
-}));
+//let stores = [NoteStore];
+//Profile = Flux.connect(Profile, stores, () => ({
+  //notes: NoteStore.getNotes()
+//}));
 
 export default Profile;

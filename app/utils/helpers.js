@@ -21,8 +21,9 @@ var helpers = {
         };
       });
   },
-  setNotesForUser(username, notes) {
-    firebaseRef.child(username).set({notes}, error => {
+
+  setNotesForNotebook(notebookId, notes) {
+    firebaseRef.child(notebookId).set({notes}, error => {
       if (error) {
         console.log('problem saving to firebase: ', error);
       } else {
@@ -31,8 +32,8 @@ var helpers = {
     });
   },
 
-  getNotesForUser(username, cb) {
-    firebaseRef.child(`${username}/notes`).once('value', cb);
+  getNotebook(notebookId, cb) {
+    firebaseRef.child(notebookId).once('value', cb);
   }
 };
 
