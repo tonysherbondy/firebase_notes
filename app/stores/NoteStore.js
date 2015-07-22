@@ -10,7 +10,7 @@ const NoteStore = biff.createStore({
 }, payload => {
   switch (payload.actionType) {
     case 'SET_NOTES': {
-      // set notes to provided array
+      notes = payload.notes;
       NoteStore.emitChange();
       break;
     }

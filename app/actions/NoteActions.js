@@ -1,4 +1,6 @@
 import biff from '../dispatcher/dispatcher';
+import helpers from '../utils/helpers';
+import Immutable from 'immutable';
 
 const NoteActions = biff.createActions({
   setNotes(notes) {
@@ -6,6 +8,15 @@ const NoteActions = biff.createActions({
       actionType: 'SET_NOTES',
       notes
     });
+  },
+
+  fetchNotes(username) {
+    helpers.getNotesForUser(username, dataObj => {
+      console.log('fetch for', username);
+      let notes = Immutable.List(dataObj.val() || []);
+      NoteActions.setNotes(notes);
+    });
+
   }
 });
 

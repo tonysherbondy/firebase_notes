@@ -2,51 +2,64 @@ import React from 'react';
 import Repos from './Github/Repos';
 import UserProfile from './Github/UserProfile';
 import Notes from './Notes/Notes';
-import helpers from '../utils/helpers';
+//import helpers from '../utils/helpers';
 
+import Flux from '../dispatcher/dispatcher';
+import NoteStore from '../stores/NoteStore';
+import NoteActions from '../actions/NoteActions';
 
 class Profile extends React.Component{
   constructor(props){
     super(props);
     this.state = {
-      notes: [],
+      username: '',
       bio: {},
       repos: []
     };
   }
-  init(){
-    let {username} = this.router.getCurrentParams();
-    helpers.getNotesForUser(username, dataObj => {
-      this.setState({notes: dataObj.val() || []});
-    });
 
-    helpers.getGithubInfo(username).then((dataObj) => {
-      this.setState({
-        bio: dataObj.bio,
-        repos: dataObj.repos
-      });
-    });
+  initState(){
+    let {username} = this.router.getCurrentParams();
+
+    // Only emit this action on username change
+    if (this.state.username !== username) {
+      this.setState({username});
+
+      NoteActions.fetchNotes(username);
+
+      // TODO - turn to store/actions
+      //helpers.getGithubInfo(username).then((dataObj) => {
+        //this.setState({
+          //bio: dataObj.bio,
+          //repos: dataObj.repos
+        //});
+      //});
+
+    }
   }
+
   componentWillMount(){
     this.router = this.context.router;
   }
   componentDidMount(){
-    this.init();
+    this.initState();
   }
   componentWillUnmount(){
   }
   componentWillReceiveProps(){
-    this.init();
+    console.log('will receive props');
+    this.initState();
   }
   handleAddNote(newNote){
+    console.log('call action', newNote);
     // TODO - Let's move this to an action
-    let {username} = this.router.getCurrentParams();
-    let notes = this.state.notes.concat([newNote]);
-    helpers.setNotesForUser(username, notes);
-    this.setState({notes});
+    //let {username} = this.router.getCurrentParams();
+    //let notes = this.state.notes.concat([newNote]);
+    //helpers.setNotesForUser(username, notes);
+    //this.setState({notes});
   }
   render(){
-    var username = this.router.getCurrentParams().username;
+    let {username} = this.state;
     return (
       <div className="row">
         <div className="col-xs-4">
@@ -58,7 +71,7 @@ class Profile extends React.Component{
         <div className="col-xs-4">
           <Notes
             username={username}
-            notes={this.state.notes}
+            notes={this.props.notes.toArray()}
             addNote={this.handleAddNote.bind(this)} />
         </div>
       </div>
@@ -69,5 +82,11 @@ class Profile extends React.Component{
 Profile.contextTypes = {
   router: React.PropTypes.func.isRequired
 };
+
+// Connect to flux
+let stores = [NoteStore];
+Profile = Flux.connect(Profile, stores, () => ({
+  notes: NoteStore.getNotes()
+}));
 
 export default Profile;
