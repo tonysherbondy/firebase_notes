@@ -11,7 +11,7 @@ class NotebookViewer extends React.Component {
     }
 
     return (
-      <div>
+      <div className="main-container">
         Viewing notebook ({this.props.notebookId})
       </div>
     );

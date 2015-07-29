@@ -1,5 +1,6 @@
 import React from 'react';
 import NotebookLoadingStatus from './NotebookLoadingStatus';
+import MenuBar from './MenuBar';
 
 class NotebookEditor extends React.Component {
 
@@ -11,8 +12,11 @@ class NotebookEditor extends React.Component {
     }
 
     return (
-      <div>
-        Show editor for notebook ({this.props.notebookId})
+      <div className="main-container">
+        <MenuBar />
+        <div className="container">
+          Show editor for notebook ({this.props.notebookId})
+        </div>
       </div>
     );
   }

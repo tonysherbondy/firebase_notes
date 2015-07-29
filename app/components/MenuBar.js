@@ -18,8 +18,12 @@ class MenuBar extends React.Component {
   }
   handleGoToView() {
     let {router} = this.context;
-    router.transitionTo('notebook_app');
+    router.transitionTo('view', router.getCurrentParams());
   }
 }
+
+MenuBar.contextTypes = {
+  router: React.PropTypes.func.isRequired
+};
 
 export default MenuBar;

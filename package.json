@@ -26,6 +26,7 @@
     "biff": "^0.2.0",
     "firebase": "^2.2.7",
     "immutable": "^3.7.4",
+    "lodash": "^3.10.0",
     "react": "^0.13.3",
     "react-router": "^0.13.3"
   }

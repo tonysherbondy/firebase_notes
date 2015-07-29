@@ -5,7 +5,7 @@ class Home extends React.Component{
     return (
       <div>
         <h2 className="text-center">
-          Enter notebook ID above.
+          Enter notebook ID in the URL bar (ex: notebook/nhan)
         </h2>
         <h4 className="text-center">
           This page should not exist and just send you to a brand new notebook.
