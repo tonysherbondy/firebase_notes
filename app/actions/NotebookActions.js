@@ -16,18 +16,27 @@ const NotebookActions = biff.createActions({
     });
     // Approximate slow server
     setTimeout( () => {
-      helpers.getNotebook(notebookId, dataObj => {
-        let notebook = dataObj.val();
-        if (notebook) {
+      helpers.getNotebook(notebookId)
+
+        .then(response => {
+          let {data} = response;
+
+          // This essentially does notebook creation here
+          let notebook = {
+            id: notebookId,
+            notes: data ? data.notes : []
+          };
           NotebookActions.setNotebook(notebook);
-        } else {
-          // TODO - this should instead be a create notebook instruction
+        })
+
+        .catch(response => {
           this.dispatch({
             actionType: 'ERROR_LOADING_NOTEBOOK',
-            notebookId
+            notebookId,
+            error: response
           });
-        }
-      });
+        });
+
     }, 1000);
   }
 });

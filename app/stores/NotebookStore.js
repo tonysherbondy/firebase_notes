@@ -1,5 +1,6 @@
 import biff from '../dispatcher/dispatcher';
 
+// Will be an immutable map
 let notebook = null;
 
 // Can be [init, loading, loaded, error]
@@ -27,6 +28,7 @@ const NotebookStore = biff.createStore({
       break;
     }
     case 'SET_NOTEBOOK': {
+      notebookStatus = 'loaded';
       notebook = payload.notebook;
       NotebookStore.emitChange();
       break;

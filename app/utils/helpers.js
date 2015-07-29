@@ -2,6 +2,7 @@ import axios from 'axios';
 import Firebase from 'firebase';
 
 let firebaseRef = new Firebase('https://amber-inferno-424.firebaseio.com/firebase_notes');
+let firebaseApi = 'https://amber-inferno-424.firebaseio.com/firebase_notes';
 
 function getRepos(username){
   return axios.get(`https://api.github.com/users/${username}/repos`);
@@ -32,8 +33,9 @@ var helpers = {
     });
   },
 
-  getNotebook(notebookId, cb) {
-    firebaseRef.child(notebookId).once('value', cb);
+  // Returns a promise
+  getNotebook(notebookId) {
+    return axios.get(`${firebaseApi}/${notebookId}.json`);
   }
 };
 

@@ -1,32 +1,16 @@
 import React from 'react';
+import { RouteHandler } from 'react-router';
 import Flux from '../dispatcher/dispatcher';
 import NotebookStore from '../stores/NotebookStore';
 import NotebookActions from '../actions/NotebookActions';
 
-class NotebookApp extends React.Component {
-
-  render() {
+// TODO Can I get rid of this by knowing more about react-router???
+// Simply holds either editor or viewer
+class NotebookApp extends React.Component{
+  render(){
     let {notebookId} = this.router.getCurrentParams();
-
-    console.log('status', this.props.notebookStatus);
-    if (!this.props.notebook) {
-      let {notebookStatus} = this.props;
-      let message;
-      if (notebookStatus === 'loading') {
-        message = `Loading ${notebookId} notebook...`;
-      } else {
-        message = `Problem with ${notebookId} notebook`;
-      }
-
-      return (
-        <div>{message}</div>
-      );
-    }
-
     return (
-      <div>
-        Show notebook ({notebookId})
-      </div>
+      <RouteHandler {...this.props} notebookId={notebookId} />
     );
   }
 
@@ -48,5 +32,6 @@ NotebookApp = Flux.connect(NotebookApp, stores, () => ({
 NotebookApp.willTransitionTo = function(transition, params) {
   NotebookActions.fetchNotebook(params.notebookId);
 };
+
 
 export default NotebookApp;
